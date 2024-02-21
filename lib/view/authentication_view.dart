@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/_commons/my_colors.dart';
 import 'package:gym_app/component/decoration_field_authentication.dart';
+import 'package:gym_app/service/authenticator_service.dart';
 
 class AuthenticationView extends StatefulWidget {
   const AuthenticationView({super.key});
@@ -8,6 +9,13 @@ class AuthenticationView extends StatefulWidget {
   @override
   State<AuthenticationView> createState() => _AuthenticationViewState();
 }
+
+//estancias dos objetos para controlar os textInformField
+TextEditingController _emailController = TextEditingController();
+TextEditingController _senhaController = TextEditingController();
+TextEditingController _nomeController = TextEditingController();
+
+AuthenticatorService _authenticatorService = AuthenticatorService();
 
 class _AuthenticationViewState extends State<AuthenticationView> {
   bool queroEntrar = true;
@@ -53,6 +61,7 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                         height: 32,
                       ),
                       TextFormField(
+                        controller: _emailController,
                         decoration: getAutheticationIputDecoration("E-mail"),
                         validator: (String? value) {
                           //para dar ok retornar null
@@ -70,6 +79,7 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
+                        controller: _senhaController,
                         decoration: getAutheticationIputDecoration("Senha"),
                         obscureText: true,
                         validator: (String? value) {
@@ -105,6 +115,7 @@ class _AuthenticationViewState extends State<AuthenticationView> {
                               ),
                               const SizedBox(height: 8),
                               TextFormField(
+                                controller: _nomeController,
                                 decoration:
                                     getAutheticationIputDecoration("Nome"),
                                 validator: (String? value) {
@@ -153,8 +164,20 @@ class _AuthenticationViewState extends State<AuthenticationView> {
 
   botaoPrincipalClicado() {
     //validate testa todos campos que tem validator no formulario
+    String nome = _nomeController.text;
+    String email = _emailController.text;
+    String senha = _senhaController.text;
+
     if (_formKey.currentState!.validate()) {
-      print("Form válido");
+      if (queroEntrar) {
+        print("entrada validada");
+      } else {
+        print("cadastro validado");
+        print(
+            "${_emailController.text}, ${_senhaController.text}, ${_nomeController.text}");
+        _authenticatorService.cadastrarUsuario(
+            nome: nome, senha: senha, email: email);
+      }
     } else {
       print("Form inválido");
     }
