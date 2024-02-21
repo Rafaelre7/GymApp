@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gym_app/view/exercises_view.dart';
 import 'package:gym_app/view/authentication_view.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();//falando para o flutter que só pode iniciar apos executar o firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
